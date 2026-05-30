@@ -1,343 +1,373 @@
 # The Dome VB — grandMA3 FX Recipe Library
 
-## Dome Programming Philosophy
+## Venue Layout
 
-The dome's geometry is your biggest creative advantage. Fixtures arranged in concentric
-rings or radiating spokes let you create effects that feel impossible in a flat room:
-pulses that bloom outward from center, rotational sweeps like a lighthouse, and waves
-that ripple from the rig down to the audience.
+**The Dome by Rutter Mills** — Virginia Beach, VA (Oceanfront district)
+Multi-level indoor concert hall with proscenium stage, general admission floor,
+and tiered/VIP areas. Outdoor Lawn Plaza for overflow.
 
-**Three keys to dome FX:**
+**Rig positions:**
+- **FOH truss** — back of room, over audience, shooting toward stage
+- **Mid-room truss** — over the floor, midway between FOH and stage
+- **Back truss / upstage** — over or behind the stage, backlight and top-wash
+- **Proscenium** — arch framing the stage opening, DMX LED strips on both sides
 
-1. **Group by ring/radius** — not by universe or fixture number. Inner ring, mid ring,
-   outer ring each get their own group. This is how you build concentric FX.
-2. **Phase = position** — use Fan to spread phase across fixture groups based on their
-   physical position in the dome. The FX engine turns position into time offset.
-3. **Stack attributes** — a single look runs FX on dimmer, color, AND tilt simultaneously
-   at different speeds. Each layer adds depth without complexity.
+---
+
+## Programming Philosophy for This Rig
+
+The primary creative axis is **depth: FOH → Mid → Stage**. Effects that travel
+along this axis feel like they pass through the room and land on the performers —
+or launch off the stage and hit the audience.
+
+**Three keys to this rig:**
+
+1. **Group by position depth** — FOH, Mid, Stage. Phase fans across depth create
+   waves that travel through the room. This is your most powerful axis.
+2. **Use the proscenium strips as a frame** — they define where the stage begins.
+   They can pulse with the music, trace an outline, or react to the show independently.
+3. **Left/right symmetry vs. asymmetry** — symmetric looks feel polished and intentional;
+   breaking symmetry (different phases or colors L vs. R) creates tension and drama.
 
 ---
 
 ## How to Read These Recipes
 
-Each recipe lists MA3 FX parameters:
-
 | Field | Meaning |
 |-------|--------|
 | **Attribute** | The fixture parameter the FX runs on |
 | **Waveform** | Sine / Cosine / Square / Ramp Up / Ramp Down / Random |
-| **Speed** | Hz (cycles per second) — 1 Hz = 60 BPM |
+| **Speed** | Hz — 1 Hz = 60 BPM, 2 Hz = 120 BPM |
 | **Size** | Amplitude as % of attribute range, or degrees for position |
-| **Phase Spread** | Total phase difference across the group (Fan this across fixtures) |
-| **Offset** | Global phase shift (delays the whole group) |
+| **Phase Spread** | Total phase difference across the group — Fan across depth or width |
+| **Sort** | How to order fixtures when fanning phase |
 
-BPM reference: 120 BPM = 2 Hz, 60 BPM = 1 Hz, 30 BPM = 0.5 Hz
+BPM reference: 120 BPM = 2 Hz · 60 BPM = 1 Hz · 30 BPM = 0.5 Hz
 
 ---
 
 ## DJ / Club Night Recipes
 
-### 1. Centripetal Dimmer Pulse
-*The dome appears to breathe inward — energy rushes from edges toward center on every beat.*
+### 1. Room Pulse — Depth Wave
+*Energy appears to launch from the stage and wash over the audience, or reverse.*
 
-**Setup:** Group fixtures by ring. Outer ring = Group 1, Mid = Group 2, Inner = Group 3.
+**Groups:** Back/stage fixtures, Mid-room fixtures, FOH fixtures — in that order.
 
-| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
-|-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Dimmer | Sine | 2 Hz (120 BPM) | 70% | 0° outer → 270° inner | Fan across ring groups |
-| 2 | Color Temp / Tint | Sine | 0.25 Hz | 20% | 0° | Subtle warmth pulse, all together |
+| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Sort |
+|-------|-----------|----------|-------|------|--------------|------|
+| 1 | Dimmer | Sine | 2 Hz | 70% | Stage=0° → Mid=120° → FOH=240° | Depth, stage to FOH |
+| 2 | Color Temp | Sine | 0.3 Hz | 20% | 0° (all together) | — |
 
-**MA3 tip:** Rate master this at 50%–200% so the LD can chase tempo live without
-reprogramming.
+**Direction:** Reverse phase order (FOH=0° → Stage=240°) and the pulse travels
+from audience toward the stage instead — great for builds.
+
+**MA3 tip:** Rate master this. At 1x it tracks 120 BPM. Push to 2x for 240 BPM intensity.
 
 ---
 
 ### 2. Aerial Beam Storm
-*Spots fill the dome with sweeping aerial beams that feel alive and chaotic but stay musical.*
+*Spots on all truss positions sweep simultaneously — creates layered aerial chaos that feels musical.*
 
-| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
-|-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Pan | Sine | 0.4 Hz | 70° | 0°→240° (fan across all spots) | Primary sweep |
-| 2 | Tilt | Cosine | 0.4 Hz | 45° | 90° offset from layer 1 | Offset makes it orbital not linear |
-| 3 | Dimmer | Sine | 0.8 Hz | 40% | 0°→360° | Beams pulse individually |
+| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Sort |
+|-------|-----------|----------|-------|------|--------------|------|
+| 1 | Pan | Sine | 0.5 Hz | 65° | 0°→180° | Left to right across each truss |
+| 2 | Tilt | Cosine | 0.5 Hz | 40° | 90° offset from Pan | Same sort |
+| 3 | Dimmer | Sine | 1 Hz | 45% | 0°→270° | FOH to Stage depth |
 
-**Note:** Set Tilt FX offset to 90° relative to Pan — this creates circular/orbital beam
-paths rather than a flat linear sweep. The dome catches all of it.
-
----
-
-### 3. Hue Rotation Wave
-*A continuous wave of color rolls across the entire rig, never stopping.*
-
-**Works on:** Wash + LED strips
-
-| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
-|-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Hue | Ramp Up | 0.15 Hz | 360° | 0°→360° (fan all fixtures by position) | Continuous color wheel |
-| 2 | Dimmer | Sine | 0.5 Hz | 25% | Matches hue fan direction | Adds depth to the wave |
-
-**MA3 tip:** Use "Sort by Position" when fanning so the wave travels physically across
-the rig rather than jumping by fixture number.
+Set Tilt waveform to Cosine (90° offset from Pan's Sine) — this creates oval/orbital
+beam paths in the air rather than a flat side-to-side sweep. With three truss positions
+at different depths, beams cross each other constantly.
 
 ---
 
-### 4. Strobe Grid Chase
-*Blinders / pixels fire in a sequence that radiates outward — feels like the room is exploding.*
+### 3. Hue Chase — FOH to Stage
+*A color wave rolls from the back of the room to the stage and repeats.*
 
-This is a **sequence-based** recipe, not FX engine. Build a chase in a separate sequence:
+**Works on:** All wash + LED strips
 
-- Step 1: Inner ring blinders (2 frames)
-- Step 2: Mid ring (2 frames)  
-- Step 3: Outer ring (2 frames)
-- Step 4: All blackout (2 frames)
+| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Sort |
+|-------|-----------|----------|-------|------|--------------|------|
+| 1 | Hue | Ramp Up | 0.2 Hz | 360° | 0°→360° | FOH to Stage (depth sort) |
+| 2 | Dimmer | Sine | 0.5 Hz | 30% | Matches Hue spread | Same sort |
 
-Run at 8–16 BPM for buildup, ramp up speed into a drop.
-Layer a Strobe FX (Square wave, 8 Hz, 100% size) on all blinders simultaneously for the
-drop itself.
+In MA3: Select all wash → Fan → Sort "By Position (Y axis)" if stage is on Y axis of
+your layout. This ties phase to physical depth, so the color wave actually travels
+through the room.
 
 ---
 
-### 5. Pan Pendulum Cross
-*Two halves of the spot rig swing in opposite directions — creates dramatic aerial X-crossings.*
+### 4. Pan Pendulum — Symmetric Split
+*Left and right halves of the rig swing in opposite directions — X-cross aerial effect.*
 
-Split spots into Left Half and Right Half groups.
+Split every truss into Left group and Right group.
 
 | Group | Attribute | Waveform | Speed | Size | Phase | Notes |
 |-------|-----------|----------|-------|------|-------|-------|
-| Left half | Pan | Sine | 0.5 Hz | 60° | 0° | Swings left→right |
-| Right half | Pan | Sine | 0.5 Hz | 60° | 180° | Opposite phase — swings right→left |
-| Both | Tilt | Sine | 0.25 Hz | 20° | 0° | Slow shared tilt keeps beams in air |
+| Left spots | Pan | Sine | 0.5 Hz | 55° | 0° | Swings stage-left |
+| Right spots | Pan | Sine | 0.5 Hz | 55° | 180° | Opposite — swings stage-right |
+| All spots | Tilt | Sine | 0.25 Hz | 15° | 0° | Shared slow tilt keeps beams aerial |
+
+Add phase spread within each half-group (0°→90°) so it's not a single hard arm but
+a soft fan of beams crossing.
 
 ---
 
-### 6. Bass Drop Bloom
-*Single triggerable moment — everything explodes outward from dome center then recovers.*
+### 5. Strobe Depth Chase
+*Blinders/strobes fire from stage outward to FOH in sequence — feels like an explosion expanding.*
 
-This is a **one-shot cue**, not a looping FX. Program as Cue 1 on a dedicated executor:
+Build as a **sequence chase** (not FX engine):
 
-- **Beat:** All fixtures, Dimmer 100%, Zoom open (wash), Iris open (spot) — 0 fade
-- **Tail:** FX on Dimmer (Sine, 3 Hz, 60% size, 0 phase, 0 delay) — runs for 4 beats
-- **Recovery:** Follow cue fades back to base look over 2 seconds
+| Step | Fixtures | Dimmer | Frame Time |
+|------|----------|--------|------------|
+| 1 | Back/stage blinders | 100% | 2 frames |
+| 2 | Mid-room blinders | 100% | 2 frames |
+| 3 | FOH blinders | 100% | 2 frames |
+| 4 | All out | 0% | 3 frames |
 
-Trigger manually on drops. Keep it rare — the dome makes this hit hard.
+Run slow (30 BPM) for buildup, accelerate into the drop. At the peak: switch to a
+full-rig Strobe FX (Square wave, 8–12 Hz, 100% size) triggered on a separate executor.
+
+---
+
+### 6. Bass Drop Punch
+*One-shot cue for drops — full rig hits hard, then decays with a fast dimmer pulse.*
+
+Program as a dedicated executor, triggered manually:
+
+- **Cue 1 (0 fade):** All fixtures → Dimmer 100%, Zoom fully open (wash), Iris open (spot)
+- **Cue 2 (auto-follow, 0.1s):** FX layer — Dimmer Sine, 3 Hz, 55% size, 0 phase, all fixtures
+- **Cue 3 (auto-follow, 3s fade):** FX removed, return to base look
+
+Use sparingly. One per section, not every 16 bars.
 
 ---
 
 ## Concert / Band Recipes
 
-### 7. Breathing Wash
-*The rig stays alive between musical moments without pulling focus.*
+### 7. Breathing Room
+*The whole rig gently pulses — alive without competing with the performance.*
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Dimmer | Sine | 0.3 Hz | 30% | 0° (all together) | No fan — room breathes as one |
-| 2 | Tilt | Sine | 0.15 Hz | 8° | 0°→45° | Barely perceptible movement |
+| 1 | Dimmer (all) | Sine | 0.3 Hz | 25% | 0° (no fan) | Room breathes as one organism |
+| 2 | Tilt (spots) | Sine | 0.12 Hz | 6° | 0°→30° depth | Barely perceptible drift |
 
-Keep Size small. The goal is "alive" not "active." Color stays in presets.
+Keep intensity anchored at 60–70%. FX rides on top — it should feel like the room
+is breathing, not flickering.
 
 ---
 
-### 8. Tilt Wave — Floor to Dome
-*A wave of beam direction rolls from audience level up through the dome.*
+### 8. Depth Tilt Wave
+*A wave of beam direction travels from FOH to stage — like a wave rolling onto shore.*
 
-**Setup:** Group spots by vertical position / tilt range (low = audience, high = dome apex).
+**Groups:** Sort spots by depth position (FOH = first, Stage = last).
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Tilt | Sine | 0.4 Hz | 40° | 0° (low/audience) → 180° (high/dome) | Fan from floor to ceiling |
-| 2 | Dimmer | Sine | 0.4 Hz | 35% | Matches tilt fan | Wave of intensity follows direction |
+| 1 | Tilt | Sine | 0.4 Hz | 35° | FOH=0° → Stage=180° | Wave moves stage-direction |
+| 2 | Dimmer | Sine | 0.4 Hz | 30% | Matches Tilt spread | Intensity follows the wave |
 
 ---
 
-### 9. Synchronized Color Shift
-*All wash fixtures slowly drift through a color range together — feels cinematic.*
+### 9. Proscenium Frame Pulse
+*The LED strips on either side of the proscenium become a reactive frame around the stage.*
+
+**Fixtures:** Proscenium DMX LED strips (left side + right side)
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Hue | Sine | 0.08 Hz | 45° | 0° | Very slow, all together |
-| 2 | Saturation | Sine | 0.05 Hz | 20% | 0° | Saturation breathes slightly slower |
+| 1 | Dimmer | Sine | 0.5 Hz | 40% | Bottom=0° → Top=180° (fan vertically) | Pulse traces the arch upward |
+| 2 | Hue | Sine | 0.15 Hz | 30° | 0° (both sides together) | Color breathes with show |
 
-Program the center Hue value to match the band's key color. The FX drifts around it.
+**Variant — Mirror trace:** Fan bottom→top on left strip, top→bottom on right strip.
+The pulse appears to trace up one side and down the other, meeting at the top of the arch.
 
 ---
 
-### 10. Gobo Pulse Layer
-*Projected texture breathes with the music — adds dimensionality without movement.*
+### 10. Gobo Texture Layer
+*Projected patterns breathe and shift — adds depth to a static color look.*
 
-**On:** Spots with rotating gobos
+**On:** Spots with rotating gobos (any truss position)
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Gobo Rotation | Ramp Up | 0.5 Hz | 100% | 0°→180° | Half fixtures spin CW, half CCW |
-| 2 | Dimmer | Sine | 0.6 Hz | 50% | 0°→120° | Projection pulses chase across rig |
-| 3 | Focus/Zoom | Sine | 0.2 Hz | 30% | 0° | Sharpness breathes slowly |
+| 1 | Gobo Rotation | Ramp Up | 0.4 Hz | 100% | FOH spots CW, Stage spots CCW | Counter-rotation at different depths |
+| 2 | Dimmer | Sine | 0.6 Hz | 45% | 0°→180° depth sort | Projection pulses travel room |
+| 3 | Focus | Sine | 0.15 Hz | 20% | 0° | Sharpness breathes slowly |
 
 ---
 
-### 11. Stage Wash Color Chase
-*Color identity travels across stage zones — guitar, keys, drums each get a wave.*
+### 11. Color Zone Chase — Stage Areas
+*Color identity moves across stage zones left to right, then resets.*
 
-Build as a **sequence** (not FX engine) with 3–4 color steps, one per stage zone.
-- Step 1: Downstage left wash (band color A) — 8 beat fade
-- Step 2: Center wash (band color B) — 8 beat fade
-- Step 3: Downstage right wash (band color A or C) — 8 beat fade
+Build as a **sequence** with 3 steps, each a stage zone:
 
-Layer FX: Dimmer Sine (0.5 Hz, 20% size, 0 phase) over all wash simultaneously for
-pulse within each color zone.
+- Step 1: Stage-left wash — Band color A (8-beat crossfade)
+- Step 2: Center wash — Band color B (8-beat crossfade)
+- Step 3: Stage-right wash — Band color A or C (8-beat crossfade)
+
+Simultaneously: Dimmer Sine FX (0.4 Hz, 20% size, 0 phase) over all wash — each zone
+pulses independently within its color. Loop runs continuously under the show.
+
+---
+
+### 12. Key Light Heartbeat
+*Front wash on performers breathes subtly — keeps energy without losing visibility.*
+
+**Fixtures:** FOH spots/wash (front key positions only)
+
+| Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
+|-------|-----------|----------|-------|------|--------------|-------|
+| 1 | Dimmer | Sine | Music BPM ÷ 4 | 15% | 0° | All key fixtures together |
+
+Size at 15% means intensity only moves between ~55% and ~70% — performers stay lit,
+but the look has pulse. Scale up to 25% size for more drama, back to 10% for subtle.
 
 ---
 
 ## Corporate / Ambient Recipes
 
-### 12. Architectural Trace
-*LED strips following dome ribs glow softly, subtly tracing the building's structure.*
+### 13. Architectural Slow Wash
+*Proscenium strips and wash create a soft, living environment — suitable for cocktail hour, reception.*
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Dimmer | Sine | 0.12 Hz | 20% | 0°→270° fan across strips | Very slow, gentle ripple |
-| 2 | Color Temp | Sine | 0.06 Hz | 15% | 0° | Barely perceptible warmth shift |
+| 1 | Dimmer (wash) | Sine | 0.15 Hz | 18% | 0° | All wash together, very gentle |
+| 2 | Hue (wash) | Sine | 0.05 Hz | 20° | 0° | Slow color drift, stays in brand range |
+| 3 | Dimmer (proscenium) | Sine | 0.1 Hz | 12% | Bottom→Top | Strips slowly breathe |
 
-Anchor intensity at 40–60%. FX rides on top. The dome structure becomes the design.
+Intensity anchored at 50%. Color centered on brand palette. Nothing moves fast.
 
 ---
 
-### 13. Brand Color Presence
-*Entire room holds brand colors with a heartbeat — alive but professional.*
+### 14. Brand Presence Look
+*Full room in brand colors, barely alive — polished and controlled.*
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Dimmer (wash) | Sine | 0.2 Hz | 15% | 0° | All together, subtle |
-| 2 | Tilt (spots) | Sine | 0.1 Hz | 5° | 0°→30° | Near-imperceptible drift |
+| 1 | Dimmer (all) | Sine | 0.18 Hz | 12% | 0° | Barely perceptible room pulse |
+| 2 | Tilt (spots) | Sine | 0.08 Hz | 4° | 0°→20° depth | Near-invisible drift |
 
-Color set in presets — brand palette locked in, FX just keeps it from feeling static.
+Color and position locked in presets. FX runs underneath — the only goal is that
+the room doesn't look frozen on a photograph.
 
 ---
 
-### 14. Clean Ambient Sweep
-*Spots drift slowly, creating gentle aerial lines that complement conversation.*
+### 15. Clean Aerial Lines
+*Spots hold gentle slow sweeps — creates interest overhead without distracting from speakers or presenters.*
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Pan | Sine | 0.08 Hz | 25° | 0°→180° | Very slow fan sweep |
-| 2 | Tilt | Sine | 0.06 Hz | 15° | 90° offset | Slightly different period feels organic |
+| 1 | Pan | Sine | 0.07 Hz | 20° | 0°→120° left-to-right | Very slow fan |
+| 2 | Tilt | Sine | 0.05 Hz | 10° | 90° offset | Different period = organic |
 
-Intensity at 30–50% for spots. No strobe. No color FX.
+Intensity at 25–35%. No color FX. No strobe.
 
 ---
 
-## Dome Signature Moves
+## Signature Moves (Venue-Specific)
 
-*These are unique to a dome and won't read the same way in any other venue.*
+### 16. Room Wave — Full Depth
+*The entire rig fires from back to front — the pulse travels through the whole room.*
 
-### 15. Radial Bloom
-*The single most identifiable dome effect — a wave opens from the center apex outward.*
-
-**Setup:** Group all fixtures by radial distance from dome center (not stage center).
-- Ring A: Fixtures closest to dome apex / center
-- Ring B: Mid-dome
-- Ring C: Outer perimeter
+All fixtures, sorted by depth (FOH first, Stage last):
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Tilt (toward apex) | Sine | 0.5 Hz | 50° | Ring A=0°, B=90°, C=180° | Bloom wave |
-| 2 | Dimmer | Sine | 0.5 Hz | 60% | Matches tilt phase | Intensity follows bloom |
-| 3 | Zoom (wash) | Sine | 0.5 Hz | 40% | Matches tilt phase | Beam widens as it blooms |
+| 1 | Dimmer | Sine | 1 Hz | 75% | FOH=0° → Stage=270° | Pulse travels FOH→Stage |
+| 2 | Tilt | Sine | 1 Hz | 25° | Matches Dimmer spread | Beams tilt with the pulse |
+| 3 | Hue | Ramp Up | 0.25 Hz | 360° | 0° (all together) | Color rolls continuously underneath |
 
-**Effect:** A pulse appears to originate from the dome's highest point and radiates
-downward/outward to the edges like a flower opening. Run slow (0.3 Hz) for drama,
-fast (1 Hz) for energy.
+This is the "everything" move. Run at key moments — not every chorus.
 
 ---
 
-### 16. Rotational Sweep
-*One "arm" of light appears to spin around the inside of the dome like a lighthouse.*
+### 17. Proscenium to Rig Cascade
+*Color or intensity starts at the proscenium frame and cascades outward to fill the room.*
 
-**Setup:** Spots arranged around the dome perimeter, fanned 0°→360° by their angular
-position (not fixture number). Sort by XY position on the plot.
+Triggerable sequence (one-shot):
+
+| Step | Fixtures | Action | Fade |
+|------|----------|--------|------|
+| 1 | Proscenium strips | Dimmer 100%, color spike | 0s in, 1.5s out |
+| 2 | Back/stage wash | Color + dimmer up | 0.3s delay, 0.8s fade |
+| 3 | Mid wash | Same | 0.3s delay, 0.8s fade |
+| 4 | FOH wash | Same | 0.3s delay, 0.8s fade |
+| 5 | All return | Base look | 2s fade |
+
+Use for walk-ons, reveal moments, first song of a set.
+
+---
+
+### 18. L/R Asymmetric Break
+*Breaking the room's natural symmetry to create tension — useful in builds before a release.*
+
+Split rig into Stage-Left and Stage-Right groups.
+
+| Group | Attribute | Waveform | Speed | Size | Phase | Color |
+|-------|-----------|----------|-------|------|-------|-------|
+| Stage Left | Pan | Sine | 0.6 Hz | 50° | 0° | Color A |
+| Stage Right | Pan | Sine | 0.9 Hz | 50° | 45° | Color B |
+| All | Dimmer | Sine | 0.4 Hz | 30% | 0° | — |
+
+The different speeds (0.6 vs 0.9 Hz) mean the two halves drift in and out of sync —
+creates natural tension that resolves when you snap back to a symmetric look at the drop.
+
+---
+
+### 19. Proscenium VU Meter
+*Strips react like a VU meter during high-energy moments — vertical chase tied to music.*
+
+**Fixtures:** Proscenium LED strips, fanned pixel-by-pixel from bottom to top.
 
 | Layer | Attribute | Waveform | Speed | Size | Phase Spread | Notes |
 |-------|-----------|----------|-------|------|--------------|-------|
-| 1 | Pan | Ramp Up | 0.15 Hz | 40° | 0°→360° sorted by angle | The rotating arm |
-| 2 | Dimmer | Sine | 0.15 Hz | 70% | Same sort, 0°→360° | Only one "arm" lit at a time |
+| 1 | Dimmer | Ramp Up | 1–2 Hz | 100% | Bottom pixel=0° → Top=360° | Chase runs bottom to top |
+| 2 | Hue | Step (via sequence) | Matched | — | — | Color changes per energy level |
 
-**Key:** The Dimmer FX at matching phase is what makes it read as a single rotating arm
-rather than all fixtures moving simultaneously. Use a narrow Size on dimmer (try 40%)
-to get a tight "arm" effect.
-
----
-
-### 17. Concentric Ring Pulse
-*Ripples radiate from the center outward — like dropping a stone in still water.*
-
-Run as a **timed sequence** for maximum control:
-
-| Step | Fixtures | Dimmer | Fade In | Hold | Fade Out |
-|------|----------|--------|---------|------|----------|
-| 1 | Ring A (inner) | 100% | 0.1s | 0.2s | 0.8s |
-| 2 | Ring B (mid) | 100% | 0.1s | 0.2s | 0.8s |
-| 3 | Ring C (outer) | 100% | 0.1s | 0.2s | 0.8s |
-| 4 | All dark | 0% | 0 | 0.5s | 0 |
-
-Loop. Adjust speed: slow (2s/ring) for ambient, fast (0.3s/ring) for intensity.
-Layer a Hue Ramp Up FX (very slow) over all rings so color shifts between pulses.
-
----
-
-### 18. Dome Vortex
-*Everything spirals — beams rotate, colors chase, the entire room feels like it's spinning.*
-
-This stacks three FX running simultaneously:
-
-| Layer | Fixtures | Attribute | Waveform | Speed | Size | Phase | Notes |
-|-------|----------|-----------|----------|-------|------|-------|-------|
-| 1 | All spots | Pan | Ramp Up | 0.2 Hz | 60° | 0°→360° by angle position | The spin |
-| 2 | All wash | Hue | Ramp Up | 0.3 Hz | 360° | 0°→360° by angle position | Color chases the spin |
-| 3 | LED strips | Dimmer | Sine | 0.6 Hz | 80% | 0°→360° by dome position | Structural highlights orbit |
-
-**Phase sort method in MA3:** Select all fixtures → Attribute → Fan → Sort "By Position"
-(use the fixture layout grid). This ensures phase is tied to physical location,
-not fixture ID.
+If strips are pixel-mappable in MA3: use the Pixel Mapper to drive a simple vertical
+gradient that responds to a Rate Master fader. Push fader = higher the "fill" reads.
 
 ---
 
 ## Rate Master Strategy
 
-Set up a Rate Master executor for each recipe category:
+One Rate Master executor governs all looping FX sequences:
 
-| Fader Position | Rate | Use Case |
-|----------------|------|----------|
-| 0% | 0 (frozen) | Hold a look as a static scene |
+| Fader % | Rate | Use Case |
+|---------|------|----------|
+| 0% | Frozen | Hold as static scene |
 | 25% | 0.5x | Ballads, slow builds, ambient |
-| 50% | 1x (default) | Standard energy |
-| 75% | 1.5x | Building energy |
-| 100% | 2x | Peak / drop moments |
-
-All FX sequences should reference the same Rate Master so one fader controls the
-feel of the entire show.
+| 50% | 1x | Default energy level |
+| 75% | 1.5x | Rising energy, second half of show |
+| 100% | 2x | Peak intensity, drops |
 
 ---
 
-## Quick Reference: Waveform Cheat Sheet
+## Waveform Reference
 
 | Waveform | Best For |
 |----------|---------|
-| Sine | Smooth, organic movement — position, dimmer breathing |
-| Cosine | Same as Sine but starts at peak — use for phase offset tricks |
-| Ramp Up | Continuous rotation, color wheel chases, orbital motion |
-| Ramp Down | Reverse chases |
-| Square | Strobing, hard on/off chases, mechanical feel |
-| Random | Fire, organic chaos, atmospheric haze movement |
+| Sine | Smooth organic movement — position sweeps, dimmer breathing |
+| Cosine | Same as Sine but starts at peak — use for 90° phase tricks (orbital beams) |
+| Ramp Up | Continuous rotation, color wheel chase, one-direction travel |
+| Ramp Down | Reverse chase direction |
+| Square | Hard on/off strobing, mechanical chase feel |
+| Random | Fire, organic atmosphere, haze/fog movement simulation |
 
 ---
 
-## Next Steps
+## What's Next
 
-- **Cue stack templates** — pre-built executor layouts for each event type
-- **Color palette library** — presets for DJ/concert/corporate with MA3 color coordinates
-- **Lua plugin** — auto-generates ring groups and phase fans from fixture layout data
-- **Look library** — full scenes (color + position + beam + FX) ready to program
+- **Color palette library** — MA3 color presets for DJ, concert, and corporate
+- **Cue stack templates** — executor page layouts per event type
+- **Lua plugin** — auto-generates depth-sorted groups and phase fans from fixture layout
+- **Look library** — full scenes (color + position + beam + FX stacked) per event type
+- **House patch** — ready to build once patch list is in hand
 
 ---
 
-*Rig: Spots, Wash, Blinders/Strobes/Pixel, LED Strips — The Dome, Virginia Beach*
-*Platform: grandMA3 — Branch: claude/grandma3-fx-cues-looks-894AY*
+*Rig: Spots, Wash, Blinders/Strobes/Pixel, Proscenium LED Strips*
+*FOH truss · Mid-room truss · Back/upstage truss · Proscenium arch*
+*The Dome by Rutter Mills — Virginia Beach, VA*
+*Platform: grandMA3*
